@@ -1,6 +1,5 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Getting Started
+## Overview
+![Changelog Generator Architecture](https://github.com/user-attachments/assets/9656ea85-60be-4ce0-94e7-83a2b3469fca)
 
 First, run the development server:
 
