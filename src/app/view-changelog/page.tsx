@@ -1,15 +1,15 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation'; // Import useSearchParams from 'next/navigation'
-import ReactMarkdown from 'react-markdown';
-import { AiOutlineLoading3Quarters, AiOutlineCloseCircle } from 'react-icons/ai';
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import ReactMarkdown from "react-markdown";
+import { AiOutlineLoading3Quarters, AiOutlineCloseCircle } from "react-icons/ai";
 
-export default function ViewChangelog() {
+function ChangelogContent() {
   const searchParams = useSearchParams();
-  const username = searchParams.get('username');
-  const repo = searchParams.get('repo');
-  
+  const username = searchParams.get("username");
+  const repo = searchParams.get("repo");
+
   const [changelog, setChangelog] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -28,9 +28,9 @@ export default function ViewChangelog() {
         } else {
           setError(data.error);
         }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (err) {
-        setError('An error occurred while fetching the changelog.');
+        console.log(err);
+        setError("An error occurred while fetching the changelog.");
       } finally {
         setLoading(false);
       }
@@ -41,7 +41,7 @@ export default function ViewChangelog() {
 
   return (
     <div className="p-6">
-      <h1 className="text-xl font-bold mb-4">Changelog for the latest release of repository {`"${repo}`}</h1>
+      <h1 className="text-xl font-bold mb-4">Changelog for the latest release of repository {`"${repo}"`}</h1>
 
       {loading && (
         <div className="space-y-2 mb-4">
@@ -52,7 +52,6 @@ export default function ViewChangelog() {
         </div>
       )}
 
-      {/* Show Error Message */}
       {error && (
         <div className="bg-red-100 text-red-700 p-3 rounded-md flex items-center space-x-2">
           <AiOutlineCloseCircle className="text-red-500" />
@@ -60,12 +59,19 @@ export default function ViewChangelog() {
         </div>
       )}
 
-      {/* Show Changelog Only If No Errors */}
       {changelog && !error && (
         <div className="bg-gray-100 p-4 rounded-md overflow-auto max-h-[500px]">
           <ReactMarkdown className="prose">{changelog}</ReactMarkdown>
         </div>
       )}
     </div>
+  );
+}
+
+export default function ViewChangelog() {
+  return (
+    <Suspense fallback={<p className="text-center text-gray-500">Loading changelog...</p>}>
+      <ChangelogContent />
+    </Suspense>
   );
 }
