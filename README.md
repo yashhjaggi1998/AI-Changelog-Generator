@@ -1,5 +1,6 @@
 ## MVP Overview
 
+### [Link to live tool](https://ai-changelog-generator-teal.vercel.app/)
 ### Note: Currently we only support public repositories: 
 1. To avoid redundancy: greptile already has a Github Auth system developed which can be extended for private repos in this project.
 
