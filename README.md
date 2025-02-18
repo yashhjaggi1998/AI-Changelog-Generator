@@ -45,7 +45,14 @@
 ```bash
 npm install
 ```
-3. Run the development server:
+3. Create a file called .env.local and add the following to it:
+```
+NEXT_PUBLIC_BASE_GH_URL=https://api.github.com
+NEXT_PUBLIC_GH_PAT=<your_github_personal_access_token>
+NEXT_PUBLIC_OPENAI_KEY=<your_openai_api_key>
+```
+
+4. Run the development server:
 ```bash
 npm run dev
 ```
