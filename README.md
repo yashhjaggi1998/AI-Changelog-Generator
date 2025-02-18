@@ -41,7 +41,11 @@
 ## Local development
 
 1. Clone the repo.
-2. Run the development server:
+2. Install dependencies
+```bash
+npm install
+```
+3. Run the development server:
 ```bash
 npm run dev
 ```
