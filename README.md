@@ -1,5 +1,14 @@
 ## Overview
+
+### Note: Currently we only support public repositories, for 2 reason: 
+1. This is an MVP.
+2. To avoid redundancy: greptile already has a Github Auth system developed which can be extended for private repos in this project.
+
+### Architecture
 ![Changelog Generator Architecture](https://github.com/user-attachments/assets/9656ea85-60be-4ce0-94e7-83a2b3469fca)
+
+### Product/Technical Decisions:
+1. 
 
 ## Local development
 
