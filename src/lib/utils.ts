@@ -13,8 +13,9 @@ export const preparePrompt = (data: ChangelogData): string => {
     const prDetails = data.PRs.map(formatPR).join('\n');
 
     const prompt = `
-        You are given below the list of PRs, each with their description and corresponding list of commit history. Each commit is separated by a semicolon.
-        Summarize the below PRs into a changelog format for a new release with output structure as a heading followed by bullet points explaining the changes.
+        You are given below the list of PR's each their description and corresponding list of commit history. Each commit is separated by a semicolon.
+        Sumarize the below PR's into a changelog format for a new release with output structure as a heading followed by bullet points explaining the changes. 
+        Add relevant icond in the .md format and add new line after sections.
         PRs:
         ${prDetails}
     `;
