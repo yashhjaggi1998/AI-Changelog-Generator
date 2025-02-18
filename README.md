@@ -34,6 +34,10 @@
 3. Add access mangement for different users.
 4. Build a custom CLI tool for users using CLI since a huge chunk use Git CLI for their version-control related tasks.
 
+ ### AI tools used.
+ 1. ChatGPT.
+ 2. Github Copilot.  
+
 ## Local development
 
 1. Clone the repo.
