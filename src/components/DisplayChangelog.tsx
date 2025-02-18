@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { filterMergedPRsFromClosedPRs, generateResponse, getLatestRelease, prepareDataForLLM } from '@/lib/github';
 import { ExportButton } from './';
 import ReactMarkdown from 'react-markdown';
-import { AiOutlineLoading3Quarters, AiOutlineCheckCircle, AiOutlineCloseCircle } from 'react-icons/ai';
+import { AiOutlineLoading3Quarters, AiOutlineCheckCircle, AiOutlineCloseCircle, AiOutlineSave } from 'react-icons/ai';
 import { PullRequest } from '../lib/data-contracts';
 
 export function DisplayChangelog({ username, repo, setStep }: { 
@@ -16,6 +17,7 @@ export function DisplayChangelog({ username, repo, setStep }: {
   const [latestReleaseStatus, setLatestReleaseStatus] = useState<{ message: string; success: boolean | null } | null>(null);
   const [mergedPRStatus, setMergedPRStatus] = useState<{ message: string; success: boolean | null } | null>(null);
   const [changelogStatus, setChangelogStatus] = useState<{ message: string; success: boolean | null } | null>(null);
+  const [changelogSaveStatus, setChangelogSaveStatus] = useState<{ message: string; success: boolean | null } | null>(null);
 
   const handleLatestRelease = async () => {
     setLatestReleaseStatus({ message: "Fetching latest release...", success: null });
@@ -70,6 +72,29 @@ export function DisplayChangelog({ username, repo, setStep }: {
       console.log(e);
       setChangelogStatus({ message: 'Error generating changelog.', success: false});
       throw new Error('Error generating changelog.');
+    }
+  };
+
+  const handleSaveChangelog = async () => {
+    try {
+      setChangelogSaveStatus({ message: 'Saving Changelog for public access!', success: null });
+      const response = await fetch('/api/save-changelog', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, repo, changelog }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error saving changelog.');
+      }
+
+      const data = await response.json();
+      setChangelogSaveStatus({ message: data.message, success: true });
+    } catch (e) {
+      console.log(e);
+      setChangelogSaveStatus({ message: 'Error saving changelog.', success: false });
     }
   };
 
@@ -144,6 +169,36 @@ export function DisplayChangelog({ username, repo, setStep }: {
       {!error && !loading && changelog && (
         <div className="bg-gray-100 p-4 rounded-md overflow-auto max-h-[500px]">
           <ReactMarkdown className="prose">{changelog}</ReactMarkdown>
+        </div>
+      )}
+
+      {/* Changelog Save Status Messages */}
+      {changelogSaveStatus && changelogSaveStatus.success !== false && (
+        <div className="space-y-2 mb-4">
+          <div className="flex items-center space-x-2">
+            {changelogSaveStatus.success === null && <AiOutlineLoading3Quarters className="animate-spin text-blue-500" />}
+            {changelogSaveStatus.success === true && (
+              <>
+                <AiOutlineCheckCircle className="text-green-500" />
+                <Link href={`/view-changelog?username=${username}&repo=${repo}`} legacyBehavior>
+                  <a className="text-blue-500 hover:underline">View Changelog</a>
+                </Link>
+            </>)}
+            <span>{changelogSaveStatus.message}</span>
+          </div>
+        </div>
+      )}
+
+      {/* Save Button Only If Changelog is Set */}
+      {!error && changelog && (
+        <div className="mt-4">
+          <button 
+            onClick={handleSaveChangelog}
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 flex items-center"
+          >
+            <AiOutlineSave className="mr-2" />
+            Save Changelog
+          </button>
         </div>
       )}
 
